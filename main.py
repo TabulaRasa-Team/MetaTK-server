@@ -7,14 +7,14 @@ from owner.controller.owner import router as owner
 app = FastAPI()
 
 origins = [
-    "https://nomadly.bitworkspace.kr"
+    # "https://localhost:3000"
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_methods=["*"],      # 모든 HTTP 메서드 허용
-    allow_headers=["*"],      # 모든 헤더 허용
+    allow_headers=["*"]       # 모든 헤더 허용
 )
 
 app.include_router(router=user)
