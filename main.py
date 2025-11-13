@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from user.controller.user import router as user
 from owner.controller.owner import router as owner
+from core.database_controller import router as database
 
 app = FastAPI()
 
@@ -19,6 +20,7 @@ app.add_middleware(
 
 app.include_router(router=user)
 app.include_router(router=owner)
+app.include_router(router=database)
 
 if __name__ == '__main__':
     import os
