@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Body
+from fastapi import APIRouter, Body, HTTPException
 
+from core.error import DuplicateResourceException, InvalidValueException
 from owner.model.owner import Store
 from owner.service import owner as service
 
@@ -7,7 +8,12 @@ router = APIRouter(prefix="/api/owner")
 
 @router.post("/store")
 def create_store(request: Store = Body()) -> dict:
-    return service.create_store(request)
+    try:
+        return service.create_store(request)
+    except DuplicateResourceException as e:
+        raise HTTPException(status_code=409, detail=e.msg)
+    except InvalidValueException as e:
+        raise HTTPException(status_code=400, detail=e.msg)
 
 @router.post("/store/menu")
 def create_menu():
