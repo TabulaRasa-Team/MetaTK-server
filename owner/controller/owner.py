@@ -1,10 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Body
+
+from owner.model.owner import Store
+from owner.service import owner as service
 
 router = APIRouter(prefix="/api/owner")
 
 @router.post("/store")
-def create_store():
-    return {"message": "POST /api/owner/store"}
+def create_store(request: Store = Body()) -> dict:
+    return service.create_store(request)
 
 @router.post("/store/menu")
 def create_menu():
