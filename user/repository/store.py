@@ -1,5 +1,16 @@
 from core.database import get_db_connection
 
+def get_all_stores():
+
+    con = get_db_connection()
+    cur = con.cursor(dictionary=True)
+
+    cur.execute(
+        "SELECT id, name, address, store_type FROM store"
+    )
+
+    return cur.fetchall()
+
 def get_store_information(store_id: str):
 
     con = get_db_connection()
@@ -30,7 +41,7 @@ def get_menus(store_id: str):
     cur = con.cursor(dictionary=True)
 
     cur.execute(
-        "select name, price, image_url from menu where store_id = %s",
+        "select name, price, image from menu where store_id = %s",
         (store_id,)
     )
 
@@ -42,7 +53,7 @@ def get_images(store_id: str):
     cur = con.cursor(dictionary=True)
 
     cur.execute(
-        "select image_url from picture where store_id = %s",
+        "select image from picture where store_id = %s",
         (store_id,)
     )
 

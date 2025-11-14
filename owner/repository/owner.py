@@ -60,13 +60,59 @@ def check_store_id(store_id: str):
 
     return cur.fetchall()
 
-def create_coupon(coupon_id: str, request: Coupon, expiration: str):
+def create_coupon(coupon_id: str, request: Coupon, status: str, validity_period: int):
     con = get_db_connection()
     cur = con.cursor(dictionary=True)
 
     cur.execute(
-        "insert into coupon(id, store_id, name, expiration) values(%s, %s, %s, %s)",
-        (coupon_id, str(request.store_id), request.name, expiration)
+        "INSERT INTO coupon(id, store_id, status, name, validity_period) VALUES(%s, %s, %s, %s, %s)",
+        (coupon_id, str(request.store_id), status, request.name, validity_period)
+    )
+
+    con.commit()
+
+def get_users_by_country(country: str):
+    con = get_db_connection()
+    cur = con.cursor(dictionary=True)
+
+    cur.execute(
+        "SELECT id FROM user WHERE country = %s",
+        (country,)
+    )
+
+    return cur.fetchall()
+
+def insert_coupon_history(user_id: str, coupon_id: str, expiration: str, status: str):
+    con = get_db_connection()
+    cur = con.cursor(dictionary=True)
+
+    cur.execute(
+        "INSERT INTO coupon_history(user_id, coupon_id, expiration, status) VALUES(%s, %s, %s, %s)",
+        (user_id, coupon_id, expiration, status)
+    )
+
+    con.commit()
+
+def insert_menu(store_id: str, menu_name: str, price: int, image: str):
+    con = get_db_connection()
+    cur = con.cursor(dictionary=True)
+
+    menu_id = str(__import__('uuid').uuid4())
+    cur.execute(
+        "INSERT INTO menu(id, store_id, name, price, image) VALUES(%s, %s, %s, %s, %s)",
+        (menu_id, store_id, menu_name, price, image)
+    )
+
+    con.commit()
+
+def insert_picture(store_id: str, image: str):
+    con = get_db_connection()
+    cur = con.cursor(dictionary=True)
+
+    picture_id = str(__import__('uuid').uuid4())
+    cur.execute(
+        "INSERT INTO picture(id, store_id, image) VALUES(%s, %s, %s)",
+        (picture_id, store_id, image)
     )
 
     con.commit()

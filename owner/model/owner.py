@@ -13,6 +13,11 @@ class DayOfWeek(Enum):
     SAT = "sat"
     SUN = "sun"
 
+class Menu(BaseModel):
+    name: str
+    price: int
+    image: str
+
 class Store(BaseModel):
     company_name: str
     bln: str
@@ -21,14 +26,12 @@ class Store(BaseModel):
     phone_number: str
     store_type: str
     operating_hours: dict[DayOfWeek, Optional[List[str]]]
+    menus: List[Menu]
+    images: List[str]
 
 class Coupon(BaseModel):
     store_id: uuid.UUID
     name: str
-
-class Menu(BaseModel):
-    name: str
-    price: int
 
 class MenuRequest(BaseModel):
     store_id: uuid.UUID
