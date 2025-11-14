@@ -1,7 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from user.controller.user import router as user
+from user.controller.store import router as user_store
+from user.controller.coupon import router as user_coupon
+from user.controller.occupations import router as user_occupations
 from owner.controller.owner import router as owner
 from core.database_controller import router as database
 
@@ -18,7 +20,9 @@ app.add_middleware(
     allow_headers=["*"]       # 모든 헤더 허용
 )
 
-app.include_router(router=user)
+app.include_router(router=user_store)
+app.include_router(router=user_coupon)
+app.include_router(router=user_occupations)
 app.include_router(router=owner)
 app.include_router(router=database)
 
