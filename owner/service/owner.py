@@ -3,7 +3,7 @@ import uuid
 from datetime import date
 
 from core.error import DuplicateResourceException, InvalidValueException, IdNotFoundException
-from owner.model.owner import Store, DayOfWeek, Coupon
+from owner.model.owner import Store, DayOfWeek, Coupon, MenuRequest
 from owner.repository import owner as repository
 from owner.repository.owner import check_store_id
 
@@ -19,11 +19,15 @@ def create_store(request: Store) -> dict:
 
     else:
         store_id = str(uuid.uuid4())
-        store_type_value = request.category.value
+        store_type_value = request.store_type
         repository.create_store(store_id, store_type_value, request)
 
         for day in DayOfWeek:
+            if request.operating_hours[day] is None:
+                repository.create_operating_hour_for_holiday(store_id, day.value)
+                continue
             repository.create_operating_hour(store_id, day.value, request.operating_hours[day][0], request.operating_hours[day][1])
+
 
         return {
             "store_id" : store_id

@@ -37,6 +37,18 @@ def create_operating_hour(store_id: str, day: str, open_time: str, close_time: s
 
     con.commit()
 
+def create_operating_hour_for_holiday(store_id: str, day: str):
+    con = get_db_connection()
+    cur = con.cursor(dictionary=True)
+
+    cur.execute(
+        "insert into operating_hour(store_id, yoil, open_time, close_time)" +
+        "values(%s, %s, null, null)",
+        (store_id, day)
+    )
+
+    con.commit()
+
 def check_store_id(store_id: str):
     con = get_db_connection()
     cur = con.cursor(dictionary=True)

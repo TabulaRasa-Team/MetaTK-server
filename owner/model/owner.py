@@ -1,13 +1,8 @@
 import uuid
 from enum import Enum
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
-
-class StoreType(Enum):
-    FOOD = "food"
-    CAFE = "cafe"
-    DRINK = "drink"
 
 class DayOfWeek(Enum):
     MON = "mon"
@@ -24,9 +19,17 @@ class Store(BaseModel):
     owner_name: str
     address: str
     phone_number: str
-    category: StoreType
-    operating_hours: dict[DayOfWeek, List[str]]
+    store_type: str
+    operating_hours: dict[DayOfWeek, Optional[List[str]]]
 
 class Coupon(BaseModel):
     store_id: uuid.UUID
     name: str
+
+class Menu(BaseModel):
+    name: str
+    price: int
+
+class MenuRequest(BaseModel):
+    store_id: uuid.UUID
+    menus: List[Menu]
