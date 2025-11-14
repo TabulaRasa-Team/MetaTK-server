@@ -1,6 +1,6 @@
+import uuid
 from enum import Enum
 from typing import List
-from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -26,3 +26,7 @@ class Store(BaseModel):
     phone_number: str
     category: StoreType
     operating_hours: dict[DayOfWeek, List[str]]
+
+class Coupon(BaseModel):
+    store_id: uuid.UUID
+    name: str

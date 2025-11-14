@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Body, HTTPException
 
-from core.error import DuplicateResourceException, InvalidValueException
-from owner.model.owner import Store
+from core.error import DuplicateResourceException, InvalidValueException, IdNotFoundException
+from owner.model.owner import Store, Coupon
 from owner.service import owner as service
 
 router = APIRouter(prefix="/api/owner")
@@ -24,5 +24,8 @@ def create_store_photo():
     return {"message": "POST /api/owner/store/photo"}
 
 @router.post("/coupon")
-def create_coupon():
-    return {"message": "POST /api/owner/coupon"}
+def create_coupon(request: Coupon = Body()) -> dict:
+    try:
+        return service.create_coupon(request)
+    except IdNotFoundException as e:
+        raise HTTPException(status_code=404, detail=e.msg)

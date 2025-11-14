@@ -1,13 +1,15 @@
 import re
 import uuid
+from datetime import date
 
-from core.error import DuplicateResourceException, InvalidValueException
-from owner.model.owner import Store, DayOfWeek
+from core.error import DuplicateResourceException, InvalidValueException, IdNotFoundException
+from owner.model.owner import Store, DayOfWeek, Coupon
 from owner.repository import owner as repository
+from owner.repository.owner import check_store_id
 
 BLN_PATTERN = re.compile(r"^\d{3}-\d{2}-\d{5}$")
 
-def create_store(request: Store) -> dict[str, str]:
+def create_store(request: Store) -> dict:
 
     if not BLN_PATTERN.fullmatch(request.bln):
         raise InvalidValueException(msg="BLN 형식이 잘못되었거나 유효하지 않습니다.")
@@ -26,3 +28,14 @@ def create_store(request: Store) -> dict[str, str]:
         return {
             "store_id" : store_id
         }
+
+def create_coupon(request: Coupon) -> dict:
+
+    if check_store_id(str(request.store_id)) is not []:
+        raise IdNotFoundException(msg="해당 store_id의 가게를 찾을 수 없습니다.")
+
+    repository.create_coupon(str(uuid.uuid4()), request, str(date.today()))
+
+    return {
+        "result" : "success"
+    }
