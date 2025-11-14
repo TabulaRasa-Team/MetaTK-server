@@ -1,10 +1,13 @@
 from fastapi import APIRouter
 
+from user.model.store import StoreDetailedResponse
+from user.service import store as service
+
 router = APIRouter(prefix="/api/user/store")
 
-@router.get("/detailed")
-def get_store_detailed():
-    return {"message": "GET /api/user/store/detailed"}
+@router.get("/detailed/{store_id}")
+def get_store_detailed(store_id: str) -> StoreDetailedResponse:
+    return service.get_store_detailed(store_id)
 
 @router.get("/{store_id}")
 def get_store(store_id: str):
