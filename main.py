@@ -10,7 +10,7 @@ from core.database_controller import router as database
 app = FastAPI()
 
 origins = [
-    # "https://localhost:3000"
+    "https://localhost:3000"
 ]
 
 app.add_middleware(
